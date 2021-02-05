@@ -2,7 +2,7 @@
 
 def decimal_to_base(n, b):
     if b == 10 or n == 0:
-        str(n)
+        return str(n)
     digits = ''
     while n:
         digits += str(n % b)
