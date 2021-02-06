@@ -1,5 +1,24 @@
 
 
+class BooleanArray:
+    def __init__(self, size):
+        self.array = [False] * size
+
+    def __resize(self, size):
+        new_array = [False] * (size - len(self.array))
+        self.array.extend(new_array)
+
+    def __getitem__(self, i):
+        if i >= len(self.array):
+            self.__resize(2*i + 1)
+        return self.array[i]
+
+    def __setitem__(self, i, value):
+        if i >= len(self.array):
+            self.__resize(2*i + 1)
+        self.array[i] = value
+
+
 def decimal_to_base(n, b):
     if b == 10 or n == 0:
         return str(n)
@@ -24,4 +43,25 @@ def lambda_algorithm(n, b):
 
 # Precondition: id must represent a nonnegative integer where 2 <= k <= 9 and 2 <= b <= 10
 def solution(n, b):
-    return lambda_algorithm(n, b)
+    notfound = True
+    counting = False
+    counter = 0
+    array = BooleanArray(int(n, b))
+    array[int(n, b)] = True
+
+    while notfound or counting:
+        n = lambda_algorithm(n, b)
+        pos = int(n, b)
+
+        if counting:
+            counter += 1
+            if pos == pos0:
+                counting = False
+
+        if array[pos] and notfound:
+            notfound = False
+            counting = True
+            pos0 = pos
+        array[pos] = True
+
+    return counter
