@@ -1,26 +1,5 @@
 
 
-class BooleanArray:
-    def __init__(self, size):
-        self.array = [False] * size
-
-    def __resize(self, size):
-        new_array = [False] * (size - len(self.array))
-        self.array.extend(new_array)
-
-    # Precondition: i >= 0
-    def __getitem__(self, i):
-        if i >= len(self.array):
-            self.__resize(2*i + 1)
-        return self.array[i]
-
-    # Precondition: i >= 0
-    def __setitem__(self, i, value):
-        if i >= len(self.array):
-            self.__resize(2*i + 1)
-        self.array[i] = value
-
-
 def decimal_to_base(n, b):
     if b == 10 or n == 0:
         return str(n)
@@ -45,30 +24,25 @@ def lambda_algorithm(n, b):
 
 # Precondition: id must represent a nonnegative integer where 2 <= k <= 9 and 2 <= b <= 10
 def solution(n, b):
+    counter = 0
+    numbers = []
     notfound = True
     counting = False
-    counter = 0
-    pos0 = -1
-    max_iterations = 1000000  # in case it's not possible to find the cycle in a reasonable time
-    array = BooleanArray(int(n, b))
-    array[int(n, b)] = True
+    n0 = ''
 
     while notfound or counting:
         n = lambda_algorithm(n, b)
-        pos = int(n, b)
 
-        counter += 1
         if counting:
-            if pos == pos0:
+            counter += 1
+            if n0 == n:
                 counting = False
-        elif counter >= max_iterations:
-            notfound = False
 
-        if array[pos] and notfound:
+        if numbers.count(n) <= 0:
+            numbers.append(n)
+        elif notfound:
             notfound = False
             counting = True
-            counter = 0
-            pos0 = pos
-        array[pos] = True
+            n0 = n
 
     return counter
