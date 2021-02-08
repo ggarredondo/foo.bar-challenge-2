@@ -8,11 +8,13 @@ class BooleanArray:
         new_array = [False] * (size - len(self.array))
         self.array.extend(new_array)
 
+    # Precondition: i >= 0
     def __getitem__(self, i):
         if i >= len(self.array):
             self.__resize(2*i + 1)
         return self.array[i]
 
+    # Precondition: i >= 0
     def __setitem__(self, i, value):
         if i >= len(self.array):
             self.__resize(2*i + 1)
@@ -46,6 +48,8 @@ def solution(n, b):
     notfound = True
     counting = False
     counter = 0
+    pos0 = -1
+    max_iterations = 10000  # in case it's not possible to find the cycle in a reasonable time
     array = BooleanArray(int(n, b))
     array[int(n, b)] = True
 
@@ -53,14 +57,17 @@ def solution(n, b):
         n = lambda_algorithm(n, b)
         pos = int(n, b)
 
+        counter += 1
         if counting:
-            counter += 1
             if pos == pos0:
                 counting = False
+        elif counter >= max_iterations:
+            notfound = False
 
         if array[pos] and notfound:
             notfound = False
             counting = True
+            counter = 0
             pos0 = pos
         array[pos] = True
 
