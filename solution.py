@@ -22,27 +22,23 @@ def lambda_algorithm(n, b):
     return n
 
 
-# Precondition: id must represent a nonnegative integer where 2 <= k <= 9 and 2 <= b <= 10
+# Floyd's cycle detection algorithm
+def floyd(f, x0, b):
+    tortoise = f(x0, b)
+    hare = f(f(x0, b), b)
+    while tortoise != hare:
+        tortoise = f(tortoise, b)
+        hare = f(f(hare, b), b)
+
+    lam = 1
+    hare = f(tortoise, b)
+    while tortoise != hare:
+        hare = f(hare, b)
+        lam += 1
+
+    return lam
+
+
+# Precondition: n must represent a nonnegative integer where 2 <= k <= 9 and 2 <= b <= 10
 def solution(n, b):
-    counter = 0
-    numbers = []
-    notfound = True
-    counting = False
-    n0 = ''
-
-    while notfound or counting:
-        n = lambda_algorithm(n, b)
-
-        if counting:
-            counter += 1
-            if n0 == n:
-                counting = False
-
-        if numbers.count(n) <= 0:
-            numbers.append(n)
-        elif notfound:
-            notfound = False
-            counting = True
-            n0 = n
-
-    return counter
+    return floyd(lambda_algorithm, n, b)
