@@ -49,7 +49,7 @@ def solution(n, b):
     counting = False
     counter = 0
     pos0 = -1
-    max_iterations = 10000  # in case it's not possible to find the cycle in a reasonable time
+    max_iterations = 1000000  # in case it's not possible to find the cycle in a reasonable time
     array = BooleanArray(int(n, b))
     array[int(n, b)] = True
 
